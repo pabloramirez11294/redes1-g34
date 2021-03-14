@@ -1,5 +1,10 @@
 # Práctica 1
 
+## Integrantes
+- 201403767 - Pablo David Ramírez Fernández
+- 201114340 - Edgar Mauricio Gómez Flores
+- 201403780 - Freddy Ramírez
+
 ## Descripción
 
 Se debe configurar y administrar los dispositivos de una infraestructura de red para una compañía, la compañía cuenta con 3 departamentos: informática, contabilidad y ventas. 
