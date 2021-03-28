@@ -16,11 +16,14 @@ web.
 La instalación de la VPN se realizón en Google Cloud y para el proveedor se usa OpenVPN.
 
 ### Comandos en la VM de Google Cloud
-
+Si se cambia la IP pública del servidor, entonces en los archivos client#.ovpn cambiar a la IP del servidor.
 ```sh
+# Instalar OpenVPN server
 $ sudo apt-get update
 $ sudo apt-get upgrade
 $ sudo wget https://cubaelectronica.com/OpenVPN/openvpn-install.sh​ && sudo bash openvpn-install.sh
+# Crear nuevo cliente
+sudo bash openvpn-install.sh
 ```
 ![image info](./img/vm-vpn.png)
 > Imagen 1: Se muestra la VM vpn2 donde se encuentra el servidor OpenVPN
