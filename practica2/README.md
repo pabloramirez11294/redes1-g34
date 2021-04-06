@@ -29,9 +29,11 @@ $ sudo wget https://cubaelectronica.com/OpenVPN/openvpn-install.sh​ && sudo ba
 
 | Host  | Dirección IP  |   
 |---|---|
-|  client1 | 10.8.0.2   |  
-|  client2 | 10.8.0.3   | 
-|  client3 | 10.8.0.4   | 
+|  Admin1 | 192.168.134.2  |  
+|  Admin2 | 192.168.134.3   | 
+|  ServerVentas | 192.168.134.130  | 
+|  ServerInformatica | 192.168.134.131  | 
+|  ServerConta | 192.168.134.68  | 
 
 
 
@@ -302,7 +304,7 @@ La tercer topología cuenta con los clientes que visitaran los sitios web Server
 ### Diagrama
 ![image info](images/topologia3.png)
 
-> Imagen 6: Se visualiza la Topología 1
+> Imagen 6: Se visualiza la Topología 3
 
 ### Direcciones IP de los Hosts
 
@@ -315,13 +317,67 @@ La tercer topología cuenta con los clientes que visitaran los sitios web Server
 |  Conta2 | 192.168.134.68    | 
 
 
-### Comandos para configurar las IP de los hosts
+### Comandos para configurar los EtherSwitch
 
 ```sh
+# ESW1
+
+conf t 
+int f1/0
+switchport mode trunk
+switchport trunk allowed vlan 1,10,20,30,1002-1005
+end
+
+conf t
+interface range f1/3 - 4
+channel-group 3 mode on
+end
+
+conf t
+interface range f1/1 - 2
+channel-group 1 mode on
+end
+
+conf t
+int Po1
+switchport mode trunk
+switchport trunk allowed vlan 1,10,20,30,1002-1005
+end
+
+conf t
+int Po3
+switchport mode trunk
+switchport trunk allowed vlan 1,10,20,30,1002-1005
+end
 
 
 ```
+### Configuraciones para los clientes VTP
+```sh
+# ESW1, ESW2, ESW3, ESW4
 
+conf t
+vtp domain Grupo34
+vtp password Grupo34
+vtp mode client
+end
+
+copy running-config startup-config
+
+```
+
+### Ejemplo de configuraciones
+
+![image info](images/conf1.png)
+> Imagen 7: Configuraciones de los EtherSwitch
+
+![image info](images/conf2.png)
+> Imagen 8: Configuraciones de los Switch, colocar en modo troncol y modo access
+
+### Ejemplo del funcionamiento
+
+![image info](images/ejemploT3.png)
+> Imagen 9: Funcionamiento de los sitios web alojados en la Topología 1, vistos desde la Topología 3
 
 
 
@@ -330,7 +386,7 @@ La tercer topología cuenta con los clientes que visitaran los sitios web Server
 Importante seleccionar **Allow GNS3 to use any configured VirtualBox adapter** para que luego podamos asignarle IP, Mask Address y Gateway a nuestra máquina virtual.
 
 ![image info](../practica1/img/images/image15.png)
-> Imagen 14
+> Imagen 10
 
 ## VLANs
 Las conexiones a hosts se hacen en tipo **access** y las conexiones entre switches de tipo troncal **dot1q**.
@@ -338,9 +394,9 @@ Las conexiones a hosts se hacen en tipo **access** y las conexiones entre switch
 
 | VLAN  | Departamento |   Red
 |---|---|---|
-|  44 |  Informatica | 192.168.134.0/24
-|  54 | Ventas  |  192.168.254.0/24
-|  64 | Contabilidad  |  192.168.34.0/24
+|  10 |  Administracion | 192.168.134.0/26
+|  20| Contabilidad  |  192.168.134.64/26
+|  30 | Ventas/Informatica  |  192.168.134.128/26
 
 
 ## Configuración de la Nube
@@ -350,20 +406,13 @@ Se conecta en las dos equipos físicamente con los clientes de OpenVPN, usando l
 Se coloca la IP del otro equipo, también el puerto local y el puerto del client2.
 
 ![image info](../practica1/img/nube.png)
-> Imagen 15
+> Imagen 11
 
 
 ## Pruebas
 
-
-
-![image info](./img/images/image3.png)
-> Imagen 16: ping en la Topología 1
-
-
-![image info](./img/images/image4.png)
-> Imagen 17: ping en la Topología 2
-
+https://drive.google.com/file/d/1LfujXpdMahxqZFZeDQfXagU_jpj1yang/view?usp=sharing
+> Video 1: Funcionamiento de las tres Topologías
 
 
 # Referencias
@@ -372,6 +421,8 @@ Se coloca la IP del otro equipo, también el puerto local y el puerto del client
 - https://medium.com/@gurayy/set-up-a-vpn-server-with-docker-in-5-minutes-a66184882c45
 - https://www.youtube.com/watch?v=sqdknpq6kDI&ab_channel=JurgenRamirez
 - https://www.youtube.com/watch?v=tBz3T5GsAm0&ab_channel=JurgenRamirez
+- https://www.youtube.com/watch?v=_eSl22ocgKQ&ab_channel=JurgenRamirez
+- https://www.youtube.com/watch?v=jjqjCIfyBzg&ab_channel=JurgenRamirez
 ---
 
 
